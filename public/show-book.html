@@ -30,12 +30,17 @@
 </nav>
 <main style="padding: 50px;">
 
+    <label for="titleSearch">Search by</label>
+    <span style="font-weight: bold">Title <input type="radio" name="title" id="titleSearch"></span>
+    <span>or</span>
+    <span style="font-weight: bold">ID Number <input type="radio" name="title" checked="checked"></span>
     <div  style="text-align: center">
         <div class="form-floating ">
 
+
         <input type="search" id="searchBookInput" class="form-control"
                placeholder="Book ID"/>
-            <label for="searchBookInput">Search for a book by ID</label>
+            <label for="searchBookInput">Search for a book by ID or Title</label>
 
         </div>
         <br>
@@ -46,26 +51,91 @@
     </div>
     <br>
 
-    <h2>Found book:</h2>
-    <div onload="load()" class="jumbotron" id="output">
-
+    <h2 style="text-align: center">Found book(s):</h2>
+    <div class="jumbotron" id="output" style="text-align: center">
+        Please search for a book above
     </div>
-
-</body>
 </main>
+</body>
+
 <script>
+
     function loadBook(id) {
         let url = "https://dahlberg-backend.herokuapp.com/api/books/";
         let xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("output").innerHTML = CreateTable(JSON.parse(this.responseText));
-            } else {
-                document.getElementById("output").innerHTML = "No book found by that ID!";
-            }
-        };
-        xhttp.open('GET', url+id, true);
-        xhttp.send();
+        if(document.getElementById("titleSearch").checked) {
+
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    let dataFunc = JSON.parse(this.responseText);
+                    for (let book in dataFunc) {
+                        console.log(dataFunc[book]["title"].includes(id))
+                        if (!(dataFunc[book]["title"].toLowerCase().includes(id.toLowerCase()))){
+                            dataFunc.remove(book);
+                            console.log("Removed: " + book)
+                        }
+                    }
+                    document.getElementById("output").innerHTML = CreateTableOfBooks(dataFunc);
+                }else {
+                    document.getElementById("output").innerHTML =
+                        "<span style='color: red; font-weight: bold; font-size: 24px; text-align: center'>No book found by that Title!</span>";
+                }
+            };
+            xhttp.open('GET', url, true);
+            xhttp.send();
+        } else {
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("output").innerHTML = CreateTable(JSON.parse(this.responseText));
+                } else {
+                    document.getElementById("output").innerHTML =
+                        "<span style='color: red; font-weight: bold; font-size: 24px; text-align: center'>No book found by that ID!</span>";
+                }
+            };
+            xhttp.open('GET', url + id, true);
+            xhttp.send();
+        }
+    }
+
+    function CreateTableOfBooks(dataFunc){
+        let table = "";
+        table =
+            '<table class="table table-bordered table-hover"> \n' +
+            '   <thead>\n' +
+            '       <tr>\n' +
+            '           <th scope="col">Title</th> \n'+
+            '           <th scope="col">Description</th> \n'+
+            '           <th scope="col">Year</th> \n'+
+            '           <th scope="col">Author</th> \n'+
+            '           <th scope="col">Hard Cover</th> \n'+
+            '           <th scope="col">Price</th> \n'+
+            '           <th scope="col">Actions</th> \n'+
+            '       </tr>\n' +
+            '   </thead>\n' +
+            '   <tbody>\n';
+
+        for (let book in dataFunc) {
+            table +=
+                '       <tr>\n' +
+                '           <td>' + dataFunc[book]["title"] + '</td>\n' +
+                '           <td>' + dataFunc[book]["description"] + '</td>\n' +
+                '           <td>' + dataFunc[book]["year"] + '</td>\n' +
+                '           <td>' + dataFunc[book]["author"] + '</td>\n' +
+                '           <td>' + dataFunc[book]["hardCover"] + '</td>\n' +
+                '           <td>$' + dataFunc[book]["price"] + '</td>\n' +
+                '           <td style=\"text-align: center\"> <button class=\"btn btn-primary\" onclick=\"deleteBook(\'' +
+                dataFunc[book]["_id"] +
+                '\')\">Delete</button> <br><br> <button class=\"btn btn-primary\" onclick=\"updateBook(\'' +
+                dataFunc[book]["_id"] +
+                '\')\">Update</button> </td>\n' +
+                '       </tr>\n';
+        }
+
+
+        table +=
+            '   </tbody>\n' +
+            '</table>\n'
+        return table;
     }
 
     function CreateTable(dataFunc){
@@ -85,21 +155,22 @@
             '   </thead>\n' +
             '   <tbody>\n';
 
-        
+
             table +=
                 '       <tr>\n' +
-                '           <td>' + dataFunc["title"]+  '</td>\n' +
-                '           <td>' + dataFunc["description"]+  '</td>\n' +
-                '           <td>' + dataFunc["year"]+  '</td>\n' +
-                '           <td>' + dataFunc["author"]+  '</td>\n' +
-                '           <td>' + dataFunc["hardCover"]+  '</td>\n' +
-                '           <td>$' + dataFunc["price"]+  '</td>\n' +
+                '           <td>' + dataFunc["title"] + '</td>\n' +
+                '           <td>' + dataFunc["description"] + '</td>\n' +
+                '           <td>' + dataFunc["year"] + '</td>\n' +
+                '           <td>' + dataFunc["author"] + '</td>\n' +
+                '           <td>' + dataFunc["hardCover"] + '</td>\n' +
+                '           <td>$' + dataFunc["price"] + '</td>\n' +
                 '           <td style=\"text-align: center\"> <button class=\"btn btn-primary\" onclick=\"deleteBook(\'' +
                 dataFunc["_id"] +
                 '\')\">Delete</button> <br><br> <button class=\"btn btn-primary\" onclick=\"updateBook(\'' +
                 dataFunc["_id"] +
                 '\')\">Update</button> </td>\n' +
                 '       </tr>\n';
+
         
 
         table +=

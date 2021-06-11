@@ -7,14 +7,39 @@
           integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">Dah Library</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="insert-book.html">Add a book</a>
+                </li>
+                <li class="nav-item">
+                    <a id="booksBtn" class="nav-link" aria-current="page" href="books.html">Books</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="show-book.html">Search</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-
-<main>
+<main style="padding: 50px">
     <div class="jumbotron" >
-        <div>Are you sure you want to delete <span id="bookIdDisplay"></span>
+        <div style="text-align: center">Are you sure you want to delete <span style="font-weight: bold"
+                                                                              id="bookIdDisplay">?</span>
+            <br><br>
         <div id="output"></div></div>
-        <button onclick="deleteBook()">Yes</button>
-        <button onclick="goBack()">No</button>
+
+    </div>
+    <div style="text-align: center;">
+    <button class="btn btn-secondary" style="text-align: center;" onclick="deleteBook()">Yes</button>
+    <button class="btn btn-primary" style="text-align: center;" onclick="goBack()">No</button>
     </div>
 </main>
 </body>
