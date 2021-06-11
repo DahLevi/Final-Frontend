@@ -16,7 +16,7 @@
 </main>
 </body>
 <script>
-    
+
     function CreateTable(dataFunc){
         let table = "";
         table =
@@ -44,7 +44,8 @@
                 '           <td>' + dataFunc[book]["hardCover"]+  '</td>\n' +
                 '           <td>' + dataFunc[book]["price"]+  '</td>\n' +
                 '           <td> <button onclick=\"deleteBook(\'' + dataFunc[book]["_id"] +
-                '\')\">Delete</button> </td>\n' +
+                '\')\">Delete</button> <button onclick=\"updateBook(\'' + dataFunc[book]["_id"] +
+                '\')\">Update</button> </td>\n' +
                 '       </tr>\n';
         }
 
@@ -55,7 +56,6 @@
     }
 
     function load() {
-        //TODO:Change this
         let url = "https://dahlberg-backend.herokuapp.com/api/books/";
         let xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
@@ -69,22 +69,14 @@
     }
 
     function deleteBook(id){
-        //TODO:Change this
-        console.log("1");
-        let url = "https://dahlberg-backend.herokuapp.com/api/books/";
-        let xhttp = new XMLHttpRequest();
-        console.log("2: " + id);
-
-        xhttp.open('DELETE', url+ id, true);
-        xhttp.send();
-        xhttp.onreadystatechange = function () {
-            console.log("3");
-            if (this.readyState == 4 && this.status == 200) {
-                console.log("4");
-                document.getElementById("output").innerHTML =
-                    CreateTable(JSON.parse(this.responseText));
-            }
-        };
+        var para = new URLSearchParams();
+        para.append("bookID", id);
+        location.href = "delete-book.html?" + para.toString();
+    }
+    function updateBook(id){
+        var para = new URLSearchParams();
+        para.append("bookID", id);
+        location.href = "update-book.html?" + para.toString();
     }
 
     window.onload = load();

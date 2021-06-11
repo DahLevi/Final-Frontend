@@ -2,13 +2,97 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Delete Book</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 </head>
 <body>
 
 
 <main>
-
+    <div class="jumbotron" >
+        <div>Are you sure you want to delete <span id="bookIdDisplay"></span>
+        <div id="output"></div></div>
+        <button onclick="deleteBook()">Yes</button>
+        <button onclick="goBack()">No</button>
+    </div>
 </main>
 </body>
+<script>
+
+    var para = new URLSearchParams(window.location.search);
+    var pass = para.get("bookID");
+
+    function load() {
+        //TODO:Change this
+        document.getElementById("bookIdDisplay").innerHTML = pass;
+        loadBook(pass);
+    }
+
+    function deleteBook(){
+        //TODO:Change this
+        let url = "https://dahlberg-backend.herokuapp.com/api/books/";
+        let xhttp = new XMLHttpRequest();
+        xhttp.open('DELETE', url+pass, false);
+
+        // Send the request
+        xhttp.send();
+
+        goBack();
+    }
+
+    function goBack(){
+        window.location.href = "/books.html";
+    }
+
+    function CreateTable(dataFunc){
+        let table = "";
+        table =
+            '<table class="table table-bordered table-hover"> \n' +
+            '   <thead>\n' +
+            '       <tr>\n' +
+            '           <th scope="col">Title</th> \n'+
+            '           <th scope="col">Description</th> \n'+
+            '           <th scope="col">Year</th> \n'+
+            '           <th scope="col">Author</th> \n'+
+            '           <th scope="col">Hard Cover</th> \n'+
+            '           <th scope="col">Price</th> \n'+
+            '       </tr>\n' +
+            '   </thead>\n' +
+            '   <tbody>\n';
+
+
+        table +=
+            '       <tr>\n' +
+            '           <td>' + dataFunc["title"]+  '</td>\n' +
+            '           <td>' + dataFunc["description"]+  '</td>\n' +
+            '           <td>' + dataFunc["year"]+  '</td>\n' +
+            '           <td>' + dataFunc["author"]+  '</td>\n' +
+            '           <td>' + dataFunc["hardCover"]+  '</td>\n' +
+            '           <td>' + dataFunc["price"]+  '</td>\n' +
+            '       </tr>\n';
+
+
+        table +=
+            '   </tbody>\n' +
+            '</table>\n'
+        return table;
+    }
+
+    function loadBook(id) {
+        let url = "https://dahlberg-backend.herokuapp.com/api/books/";
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("output").innerHTML = CreateTable(JSON.parse(this.responseText));
+            } else {
+
+            }
+        };
+        xhttp.open('GET', url+id, true);
+        xhttp.send();
+    }
+
+    window.onload = load();
+</script>
 </html>
