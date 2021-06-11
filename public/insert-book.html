@@ -61,7 +61,7 @@
             <div class="form-group">
                 <label for="hardCover">Hardcover:</label>
                 <span>Yes <input id="hardCover" name="hardCover" type="radio"></span>
-                <span>No <input name="hardCover" type="radio"></span>
+                <span>No <input name="hardCover" type="radio" checked="checked"></span>
             </div>
             <div class="mb-3 form-group">
                 <label for="price">Price:</label>
@@ -83,8 +83,18 @@
         let xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
+
+
                 document.getElementById("output").innerHTML = "Book added with ID: " +
-                    "<pre>" + this.responseText["id"] + "</pre>";
+                    "<pre>" + JSON.parse(this.responseText)["id"] + "</pre>";
+
+                document.getElementById("title").value = "";
+                document.getElementById("description").value = "";
+                document.getElementById("year").value = "";
+                document.getElementById("author").value = "";
+                document.getElementById("hardCover").checked = false;
+                document.getElementById("price").value = "";
+
             }
         };
 

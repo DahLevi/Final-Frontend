@@ -12,7 +12,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="index.html">Dah Library</a>
-        <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+        <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                class="navbar-toggler"
                 data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -37,6 +38,13 @@
     <br>
     <div class="jumbotron" id="output" onload="load()">
 
+    </div>
+    <div style="text-align: center">
+        <button class="btn btn-primary" id="first" onclick="firstPage()" value="first">First Page</button>
+        <button class="btn btn-primary" id="next" onclick="nextPage()" value="next">Next Page ></button>
+        <button class="btn btn-primary" id="previous" onclick="previousPage()" value="previous"> < Previous Page
+        </button>
+        <button class="btn btn-primary" id="last" onclick="lastPage()" value="last">Last Page</button>
     </div>
 </main>
 </body>
@@ -79,7 +87,8 @@
         table +=
             '   </tbody>\n' +
             '</table>\n'
-        return table;
+        //return table;
+        document.getElementById("output").innerHTML = table;
     }
 
     function load() {
@@ -87,8 +96,12 @@
         let xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("output").innerHTML =
-                    CreateTable(JSON.parse(this.responseText));
+                let bookList = JSON.parse(this.responseText)
+                for (let book in bookList) {
+                    books.push(bookList[book]);
+                }
+                //document.getElementById("output").innerHTML =
+                populateList();//CreateTable(JSON.parse(this.responseText));
             }
         };
         xhttp.open('GET', url, true);
@@ -108,5 +121,54 @@
     }
 
     window.onload = load();
+
+
+    /////PAGING Scripts
+    var books = new Array();
+    var currentPage = 1;
+    var booksPerPage = 20;
+    var numberOfPages = 1;
+
+    function populateList() {
+        numberOfPages = parseInt((((books.length / booksPerPage)|0) + 1));
+        let begin = ((currentPage - 1) * booksPerPage);
+        let end = begin + booksPerPage;
+        let tableList = new Array();
+        for (i = begin; i < end; i++) {
+            if (i < books.length) {
+                tableList.push(books[i])
+            }
+        }
+
+        CreateTable(tableList);
+        checkPageNumbers();
+    }
+
+    function nextPage() {
+        currentPage += 1;
+        populateList();
+    }
+
+    function previousPage() {
+        currentPage -= 1;
+        populateList();
+    }
+
+    function firstPage() {
+        currentPage = 1;
+        populateList();
+    }
+
+    function lastPage() {
+        currentPage = numberOfPages;
+        populateList();
+    }
+
+    function checkPageNumbers() {
+        document.getElementById("next").disabled = (currentPage === numberOfPages);
+        document.getElementById("previous").disabled = (currentPage === 1);
+        document.getElementById("first").disabled = (currentPage === 1);
+        document.getElementById("last").disabled = (currentPage === numberOfPages);
+    }
 </script>
 </html>
