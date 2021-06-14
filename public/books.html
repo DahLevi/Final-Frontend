@@ -11,9 +11,8 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">Dah Library</a>
-        <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
-                class="navbar-toggler"
+        <a class="navbar-brand" href="index.html">Dah Bookstore</a>
+        <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
                 data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -23,7 +22,7 @@
                     <a aria-current="page" class="nav-link" href="insert-book.html">Add a book</a>
                 </li>
                 <li class="nav-item">
-                    <a aria-current="page" class="nav-link active" href="books.html" id="booksBtn">Books</a>
+                    <a aria-current="page" class="nav-link" href="books.html" id="booksBtn">Books</a>
                 </li>
                 <li class="nav-item">
                     <a aria-current="page" class="nav-link" href="show-book.html">Search</a>
@@ -60,7 +59,7 @@
             '           <th scope="col" style="font-weight: bold">Description</th> \n' +
             '           <th scope="col" style="font-weight: bold">Year</th> \n' +
             '           <th scope="col" style="font-weight: bold">Author</th> \n' +
-            '           <th scope="col" style="font-weight: bold">Hard Cover</th> \n' +
+            '           <th scope="col" style="font-weight: bold">Cover</th> \n' +
             '           <th scope="col" style="font-weight: bold">Price</th> \n' +
             '           <th scope="col" style="font-weight: bold">Actions</th> \n' +
             '       </tr>\n' +
@@ -74,7 +73,7 @@
                 '           <td>' + dataFunc[book]["description"] + '</td>\n' +
                 '           <td>' + dataFunc[book]["year"] + '</td>\n' +
                 '           <td>' + dataFunc[book]["author"] + '</td>\n' +
-                '           <td>' + dataFunc[book]["hardCover"] + '</td>\n' +
+                '           <td>' + getCover(dataFunc[book]["hardCover"]) + '</td>\n' +
                 '           <td>$' + dataFunc[book]["price"] + '</td>\n' +
                 '           <td style=\"text-align: center\"> <button class=\"btn btn-primary\" onclick=\"deleteBook(\'' +
                 dataFunc[book]["_id"] +
@@ -118,6 +117,14 @@
         var para = new URLSearchParams();
         para.append("bookID", id);
         location.href = "update-book.html?" + para.toString();
+    }
+
+    function getCover(hardcover){
+        if (hardcover){
+            return "Hardcover"
+        } else {
+            return "Paperback"
+        }
     }
 
     window.onload = load();

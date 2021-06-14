@@ -73,10 +73,9 @@
                 if (this.readyState == 4 && this.status == 200) {
                     let dataFunc = JSON.parse(this.responseText);
                     for (let book in dataFunc) {
-                        console.log(dataFunc[book]["title"].includes(id))
+
                         if (!(dataFunc[book]["title"].toLowerCase().includes(id.toLowerCase()))) {
-                            dataFunc.remove(book);
-                            console.log("Removed: " + book)
+                            delete dataFunc[book]
                         }
                     }
                     document.getElementById("output").innerHTML = CreateTableOfBooks(dataFunc);
@@ -111,7 +110,7 @@
             '           <th scope="col" style="font-weight: bold">Description</th> \n' +
             '           <th scope="col" style="font-weight: bold">Year</th> \n' +
             '           <th scope="col" style="font-weight: bold">Author</th> \n' +
-            '           <th scope="col" style="font-weight: bold">Hard Cover</th> \n' +
+            '           <th scope="col" style="font-weight: bold">Cover</th> \n' +
             '           <th scope="col" style="font-weight: bold">Price</th> \n' +
             '           <th scope="col" style="font-weight: bold">Actions</th> \n' +
             '       </tr>\n' +
@@ -125,7 +124,7 @@
                 '           <td>' + dataFunc[book]["description"] + '</td>\n' +
                 '           <td>' + dataFunc[book]["year"] + '</td>\n' +
                 '           <td>' + dataFunc[book]["author"] + '</td>\n' +
-                '           <td>' + dataFunc[book]["hardCover"] + '</td>\n' +
+                '           <td>' + getCover(dataFunc[book]["hardCover"]) + '</td>\n' +
                 '           <td>$' + dataFunc[book]["price"] + '</td>\n' +
                 '           <td style=\"text-align: center\"> <button class=\"btn btn-primary\" onclick=\"deleteBook(\'' +
                 dataFunc[book]["_id"] +
@@ -152,7 +151,7 @@
             '           <th scope="col">Description</th> \n' +
             '           <th scope="col">Year</th> \n' +
             '           <th scope="col">Author</th> \n' +
-            '           <th scope="col">Hard Cover</th> \n' +
+            '           <th scope="col">Cover</th> \n' +
             '           <th scope="col">Price</th> \n' +
             '           <th scope="col">Actions</th> \n' +
             '       </tr>\n' +
@@ -166,7 +165,7 @@
             '           <td>' + dataFunc["description"] + '</td>\n' +
             '           <td>' + dataFunc["year"] + '</td>\n' +
             '           <td>' + dataFunc["author"] + '</td>\n' +
-            '           <td>' + dataFunc["hardCover"] + '</td>\n' +
+            '           <td>' + getCover(dataFunc["hardCover"]) + '</td>\n' +
             '           <td>$' + dataFunc["price"] + '</td>\n' +
             '           <td style=\"text-align: center\"> <button class=\"btn btn-primary\" onclick=\"deleteBook(\'' +
             dataFunc["_id"] +
@@ -195,7 +194,13 @@
     }
 
 
-
+    function getCover(hardcover){
+        if (hardcover){
+            return "Hardcover"
+        } else {
+            return "Paperback"
+        }
+    }
 
 </script>
 </html>

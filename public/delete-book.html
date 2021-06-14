@@ -82,7 +82,7 @@
             '           <th scope="col" style="font-weight: bold">Description</th> \n' +
             '           <th scope="col" style="font-weight: bold">Year</th> \n' +
             '           <th scope="col" style="font-weight: bold">Author</th> \n' +
-            '           <th scope="col" style="font-weight: bold">Hard Cover</th> \n' +
+            '           <th scope="col" style="font-weight: bold">Cover</th> \n' +
             '           <th scope="col" style="font-weight: bold">Price</th> \n' +
             '       </tr>\n' +
             '   </thead>\n' +
@@ -95,7 +95,7 @@
             '           <td>' + dataFunc["description"] + '</td>\n' +
             '           <td>' + dataFunc["year"] + '</td>\n' +
             '           <td>' + dataFunc["author"] + '</td>\n' +
-            '           <td>' + dataFunc["hardCover"] + '</td>\n' +
+            '           <td>' + getCover(dataFunc["hardCover"]) + '</td>\n' +
             '           <td>$' + dataFunc["price"] + '</td>\n' +
             '       </tr>\n';
 
@@ -104,6 +104,14 @@
             '   </tbody>\n' +
             '</table>\n'
         return table;
+    }
+
+    function getCover(hardcover){
+        if (hardcover){
+            return "Hardcover"
+        } else {
+            return "Paperback"
+        }
     }
 
     function loadBook(id) {
